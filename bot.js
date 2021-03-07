@@ -1,89 +1,73 @@
-var pages = require("./pages.js");
-var express = require("express");
+var pages = require('./pages.js');
+var express = require('express');
 var app = express();
-var bodyParser = require("body-parser");
-var cors = require("cors");
-var redis = require("redis");
-var https = require("https");
-var fs = require("fs");
-var messaging = require("./messaging.js");
+var bodyParser = require('body-parser');
+var cors = require('cors');
+var redis = require('redis');
+var https = require('https');
+var fs = require('fs');
+var messaging = require('./messaging.js');
 
 var red = redis.createClient();
-red.on("error", (err) =>
-{
-	//console.log("Redis error: " + err);
+red.on('error', (err) => {
+  //console.log("Redis error: " + err);
 });
 
 const sslOptions = {
-    key: fs.readFileSync('yolostudio_xyz.key'),
-    cert: fs.readFileSync('yolostudio_xyz.crt'),
-    ca: fs.readFileSync('yolostudio_xyz.ca-bundle')
+  key: fs.readFileSync('yolostudio_xyz.key'),
+  cert: fs.readFileSync('yolostudio_xyz.crt'),
+  ca: fs.readFileSync('yolostudio_xyz.ca-bundle'),
 };
 
-app.set("port", (process.env.PORT || 8000));
+app.set('port', process.env.PORT || 8000);
 app.use(bodyParser.json());
 app.use(cors());
 
-https.createServer(sslOptions, app).listen(app.get("port"), function()
-{
-	console.log("Start FBInstant Bot Success!");
+app.listen(app.get('port'), function () {
+  console.log('Start FBInstant Bot Success!');
 });
 
-app.get("/webhook", function(request, response)
-{
-	if (request.query["hub.mode"] === "subscribe" && request.query["hub.verify_token"] === pages.GetVertifyToken())
-	{
-		response.status(200).send(request.query["hub.challenge"]);
-	}
-	else
-	{
-		response.sendStatus(403);          
-	}  
+app.get('/webhook', function (request, response) {
+  if (
+    request.query['hub.mode'] === 'subscribe' &&
+    request.query['hub.verify_token'] === pages.GetVertifyToken()
+  ) {
+    response.status(200).send(request.query['hub.challenge']);
+  } else {
+    response.sendStatus(403);
+  }
 });
 
-app.post("/webhook", function(request, response)
-{
-	var data = request.body;
-	if (data.object === "page" && data.entry !== undefined)
-	{
-		data.entry.forEach(function(entry)
-		{
-			if (entry.messaging !== undefined)
-			{
-				var page_id = entry.id;
-				// Iterate over each messaging event
-				entry.messaging.forEach(function(event)
-				{
-					if (event.message)
-					{
-						HandleMessage(event);
-					}
-					else if (event.game_play)
-					{
-						HandleGameplay(event, pages.GetGame(page_id));
-					}
-					else
-					{
-						// console.log("Webhook received unknown event: ", event);
-					}
-				});
-			}
-		});
-	}
-	response.sendStatus(200);
+app.post('/webhook', function (request, response) {
+  var data = request.body;
+  if (data.object === 'page' && data.entry !== undefined) {
+    data.entry.forEach(function (entry) {
+      if (entry.messaging !== undefined) {
+        var page_id = entry.id;
+        // Iterate over each messaging event
+        entry.messaging.forEach(function (event) {
+          if (event.message) {
+            HandleMessage(event);
+          } else if (event.game_play) {
+            HandleGameplay(event, pages.GetGame(page_id));
+          } else {
+            // console.log("Webhook received unknown event: ", event);
+          }
+        });
+      }
+    });
+  }
+  response.sendStatus(200);
 });
 
-function HandleMessage(event)
-{
-}
+function HandleMessage(event) {}
 
-function HandleGameplay(event, game)
-{
-	var sender_id = event.sender.id; 
-	var player_id = event.game_play.player_id; 
-	var context_id = event.game_play.context_id;
+function HandleGameplay(event, game) {
+  var sender_id = event.sender.id;
+  var player_id = event.game_play.player_id;
+  var context_id = event.game_play.context_id;
 
-	/*if (event.game_play.payload)
+  /*if (event.game_play.payload)
 	{
 		//
 		// The variable payload here contains data set by
@@ -92,36 +76,38 @@ function HandleGameplay(event, game)
 		var payload = JSON.parse(event.game_play.payload);
 	}*/
 
-	AddPlayer(sender_id, player_id, context_id, game);
+  AddPlayer(sender_id, player_id, context_id, game);
 }
 
-function AddPlayer(sender_id, player_id, context_id, game)
-{
-	var now = Date.now();
-	var key = game.key + ":" + player_id;
+function AddPlayer(sender_id, player_id, context_id, game) {
+  var now = Date.now();
+  var key = game.key + ':' + player_id;
 
-	red.exists(key, function(err, exists)
-	{
-		if (!exists)
-		{
-			// Player does not exist so add them
-			// pid - Page scoped player id
-			// cid - Context ID
-			// tsm - Total sent messages since player last played
-			// lt - Last time a message was sent (resets each timea message is sent or the player plays the game)
-			if (context_id !== undefined)
-				red.hmset(key, "pid", sender_id, "cid", context_id, "tsm", "0", "lt", now);
-			else
-				red.hmset(key, "pid", sender_id, "tsm", "0", "lt", now);
+  red.exists(key, function (err, exists) {
+    if (!exists) {
+      // Player does not exist so add them
+      // pid - Page scoped player id
+      // cid - Context ID
+      // tsm - Total sent messages since player last played
+      // lt - Last time a message was sent (resets each timea message is sent or the player plays the game)
+      if (context_id !== undefined)
+        red.hmset(
+          key,
+          'pid',
+          sender_id,
+          'cid',
+          context_id,
+          'tsm',
+          '0',
+          'lt',
+          now
+        );
+      else red.hmset(key, 'pid', sender_id, 'tsm', '0', 'lt', now);
 
-			console.log("Added " + sender_id + " to database success!");
-		}
-		else
-		{
-			// Player has come back so reset send
-			red.hmset(key, "tsm", "0", "lt", now);
-		}
-	});
+      console.log('Added ' + sender_id + ' to database success!');
+    } else {
+      // Player has come back so reset send
+      red.hmset(key, 'tsm', '0', 'lt', now);
+    }
+  });
 }
-
-

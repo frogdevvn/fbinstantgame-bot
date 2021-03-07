@@ -1,41 +1,36 @@
-var VERIFY_TOKEN = "@@yolostudio";
+var VERIFY_TOKEN = '@@yolostudio';
 var PAGES = [
-	// Add your pages here, change key for each one, I use numberical values starting at 0
-	{
-		id: "297646080934977",
-		name: "Merge Spaceship IDLE",
-		key: "0",
-		title: "Your offline earnings are FULL!",
-		subtitle: "We miss you, come back and play",
-		cta: "Play Now",
-		imageurl: "https://i.ibb.co/qnPQwzz/banner-share.jpg",
-		payload: null,
-		pat: "EAADqWjBZB7owBAOuNVXy64I59rRr6lZBTATEYPQOB73UE0ZArAwZC9m7e4UDE8SVmlbjU7skZCzGfQE0EP9iVYBxMoNvJ0zZBVb27whz1H7X4a4GTzUV6cDOK4YHZAaZAQFUZCZCp2W7jdewApmcAkXMuQpt3R4wLLMqZCMI9eK2ZB6I4aQFmQeOojcN",
-	},
+  // Add your pages here, change key for each one, I use numberical values starting at 0
+  {
+    id: '102026535293831',
+    name: 'King of Tiles - Matching Game',
+    key: '0',
+    title: 'Daily Reward!',
+    subtitle: 'A free rewards is waiting for you! Claim now!',
+    cta: 'Claim',
+    imageurl: 'https://i.ibb.co/5YKW8h4/Banner-1200-627.png',
+    payload: null,
+    pat:
+      'EAAlbC6xI39oBAKgEVhgsQyBdcLjxrpyssJ60VWyPheILEFdJas8XNzSY1YvBOkfOZAX5dx3bwo7B3X0DcGBb4V3dkodX3hrQM6XeciSHVgbf6oQ4QzHFEdmZCrKdZCYCNqa1ElDxjKEaXQmOAgaeEZAnZCVI0SBUbHZAQZCIi1fjb1kZCnBN6XXP0eoqOlKnhI8ZD',
+  },
 ];
 
-function GetGame(page_id)
-{
-	for (var t = 0; t < PAGES.length; t++)
-	{
-		if (page_id === PAGES[t].id)
-			return PAGES[t];
-	}
+function GetGame(page_id) {
+  for (var t = 0; t < PAGES.length; t++) {
+    if (page_id === PAGES[t].id) return PAGES[t];
+  }
 }
 
-function GetPage(which)
-{
-	return PAGES[which];
+function GetPage(which) {
+  return PAGES[which];
 }
 
-function GetVertifyToken()
-{
-	return VERIFY_TOKEN;
+function GetVertifyToken() {
+  return VERIFY_TOKEN;
 }
 
-module.exports = 
-{
-	GetGame,
-	GetPage,
-	GetVertifyToken,
+module.exports = {
+  GetGame,
+  GetPage,
+  GetVertifyToken,
 };
