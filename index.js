@@ -27,6 +27,10 @@ app.listen(app.get('port'), function () {
   console.log('Start FBInstant Bot Success!');
 });
 
+app.get('/', (req, res) => {
+  res.send('Server good');
+});
+
 app.get('/webhook', function (request, response) {
   if (
     request.query['hub.mode'] === 'subscribe' &&
