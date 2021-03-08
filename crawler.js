@@ -41,7 +41,7 @@ function ProcessPlayers() {
           if (!err) {
             var days = (now - obj.lt) / (3600000 * 24);
             var tsm = obj.tsm | 0;
-            if (true) {
+            if (CanSend(tsm, days)) {
               tsm++;
               red.hmset(key, 'tsm', tsm, 'lt', now);
               messaging.MessagePlayer(key, obj, tsm, days);
@@ -58,4 +58,4 @@ function ProcessPlayers() {
   });
 }
 
-setInterval(ProcessPlayers, 30000);
+setInterval(ProcessPlayers, 2000);

@@ -55,7 +55,7 @@ function CallSendAPI(messageData, pat) {
     },
     function (error, response, body) {
       console.log(
-        'send api returned',
+        '===> CallSendAPI: ',
         'error',
         error,
         'status code',
