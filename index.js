@@ -31,7 +31,7 @@ https.createServer(sslOptions, app).listen(app.get('port'), function () {
 });
 
 app.get('/', (req, res) => {
-  res.send('Server good');
+  res.send('Server is running OK');
 });
 
 app.get('/webhook', function (request, response) {
