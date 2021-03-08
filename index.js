@@ -14,9 +14,8 @@ red.on('error', (err) => {
 });
 
 const sslOptions = {
-  key: fs.readFileSync('private.key'),
-  cert: fs.readFileSync('certificate.crt'),
-  ca: fs.readFileSync('ca_bundle.crt'),
+  key: fs.readFileSync('/etc/letsencrypt/live/yomobstudio.xyz/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/yomobstudio.xyz/fullchain.pem'),
 };
 
 app.set('port', process.env.PORT || 8000);
