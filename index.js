@@ -111,6 +111,8 @@ function AddPlayer(sender_id, player_id, context_id, game) {
         );
       else red.hmset(key, 'pid', sender_id, 'tsm', '0', 'lt', now);
 
+      messaging.MessagePlayerFirstTime(sender_id);
+
       console.log('Added ' + sender_id + ' to database success!');
     } else {
       // Player has come back so reset send

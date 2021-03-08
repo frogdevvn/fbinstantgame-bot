@@ -86,6 +86,41 @@ function MessagePlayer(key, obj, tsm, days) {
   BuildAndSendMessage(obj.pid, obj.cid, pages.GetPage(game_index));
 }
 
+function MessagePlayerFirstTime(sender_id) {
+  var button = {
+    type: 'game_play',
+    title: 'Play Now',
+  };
+
+  var messageData = {
+    recipient: {
+      id: sender_id,
+    },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          template_type: 'generic',
+          elements: [
+            {
+              title: 'Thanks for playing! Hope to see you again!',
+              subtitle: 'Invite your friends to challenge them',
+              image_url: 'https://i.ibb.co/5YKW8h4/Banner-1200-627.png',
+              buttons: [button],
+            },
+          ],
+        },
+      },
+    },
+  };
+
+  CallSendAPI(
+    messageData,
+    'EAAlbC6xI39oBAKgEVhgsQyBdcLjxrpyssJ60VWyPheILEFdJas8XNzSY1YvBOkfOZAX5dx3bwo7B3X0DcGBb4V3dkodX3hrQM6XeciSHVgbf6oQ4QzHFEdmZCrKdZCYCNqa1ElDxjKEaXQmOAgaeEZAnZCVI0SBUbHZAQZCIi1fjb1kZCnBN6XXP0eoqOlKnhI8ZD'
+  );
+}
+
 module.exports = {
   MessagePlayer,
+  MessagePlayerFirstTime,
 };
