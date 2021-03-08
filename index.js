@@ -14,16 +14,20 @@ red.on('error', (err) => {
 });
 
 const sslOptions = {
-  key: fs.readFileSync('yolostudio_xyz.key'),
-  cert: fs.readFileSync('yolostudio_xyz.crt'),
-  ca: fs.readFileSync('yolostudio_xyz.ca-bundle'),
+  key: fs.readFileSync('private.key'),
+  cert: fs.readFileSync('certificate.crt'),
+  ca: fs.readFileSync('ca_bundle.crt'),
 };
 
 app.set('port', process.env.PORT || 8000);
 app.use(bodyParser.json());
 app.use(cors());
 
-app.listen(app.get('port'), function () {
+// app.listen(app.get('port'), function () {
+//   console.log('Start FBInstant Bot Success!');
+// });
+
+https.createServer(sslOptions, app).listen(app.get('port'), function () {
   console.log('Start FBInstant Bot Success!');
 });
 
