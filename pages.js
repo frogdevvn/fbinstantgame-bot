@@ -3,6 +3,7 @@ var PAGES = [
   // Add your pages here, change key for each one, I use numberical values starting at 0
   {
     id: '102026535293831',
+    url: 'https://fb.gg/play/kingoftiles',
     name: 'King of Tiles - Matching Game',
     key: '0',
     title: 'Daily Reward!',

@@ -10,8 +10,10 @@ var request = require('request');
 //
 function BuildAndSendMessage(sender_id, context_id, page) {
   var button = {
-    type: 'game_play',
+    type: 'web_url',
     title: page.cta,
+    url: page.url,
+    webview_height_ratio: 'full',
   };
 
   if (context_id) button.game_metadata = { context_id: context_id };
@@ -88,8 +90,10 @@ function MessagePlayer(key, obj, tsm, days) {
 
 function MessagePlayerFirstTime(sender_id) {
   var button = {
-    type: 'game_play',
+    type: 'web_url',
     title: 'Play Now',
+    url: 'https://fb.gg/play/kingoftiles',
+    webview_height_ratio: 'full',
   };
 
   var messageData = {
