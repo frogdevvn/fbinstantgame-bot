@@ -9,9 +9,6 @@ var fs = require('fs');
 var messaging = require('./messaging.js');
 
 var red = redis.createClient();
-red.on('error', (err) => {
-  //console.log("Redis error: " + err);
-});
 
 const sslOptions = {
   key: fs.readFileSync('/etc/letsencrypt/live/yomobstudio.xyz/privkey.pem'),
@@ -58,7 +55,7 @@ app.post('/webhook', function (request, response) {
           } else if (event.game_play) {
             HandleGameplay(event, pages.GetGame(page_id));
           } else {
-            // console.log("Webhook received unknown event: ", event);
+            console.log('Webhook received unknown event: ', event);
           }
         });
       }
@@ -111,9 +108,9 @@ function AddPlayer(sender_id, player_id, context_id, game) {
         );
       else red.hmset(key, 'pid', sender_id, 'tsm', '0', 'lt', now);
 
-      messaging.MessagePlayerFirstTime(sender_id);
+      messaging.MessagePlayerFirstTime(game, sender_id);
 
-      console.log('Added ' + sender_id + ' to database success!');
+      console.log(`[${game.name}] Added ' + sender_id + ' success!`);
     } else {
       // Player has come back so reset send
       red.hmset(key, 'tsm', '0', 'lt', now);

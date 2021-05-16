@@ -33,7 +33,7 @@ function BuildAndSendMessage(sender_id, context_id, page) {
             {
               title: page.title,
               subtitle: page.subtitle,
-              image_url: page.imageurl,
+              image_url: page.imageUrl,
               buttons: [button],
             },
           ],
@@ -56,15 +56,9 @@ function CallSendAPI(messageData, pat) {
       body: messageData,
     },
     function (error, response, body) {
-      console.log(
-        '===> CallSendAPI: ',
-        'error',
-        error,
-        'status code',
-        response.statusCode,
-        'body',
-        body
-      );
+      if (error) {
+        console.log(`[CallSendAPI] Error: ${error}`);
+      }
     }
   );
 }
@@ -73,26 +67,20 @@ function MessagePlayer(key, obj, tsm, days) {
   var prms = key.split(':');
   var game_index = prms[0] | 0;
   var player_id = prms[1];
+  const page = pages.GetPage(game_index);
 
   console.log(
-    '=> Sending message to ' +
-      game_index +
-      ' - ' +
-      player_id +
-      ', tsm = ' +
-      tsm +
-      ', days = ' +
-      days
+    `[${page.name}] Sent message to ${player_id}! (TSM: ${tsm}, Offline Days: ${days})`
   );
 
-  BuildAndSendMessage(obj.pid, obj.cid, pages.GetPage(game_index));
+  BuildAndSendMessage(obj.pid, obj.cid, page);
 }
 
-function MessagePlayerFirstTime(sender_id) {
+function MessagePlayerFirstTime(game, sender_id) {
   var button = {
     type: 'web_url',
     title: 'Play Now',
-    url: 'https://fb.gg/play/kingoftiles',
+    url: game.url,
     webview_height_ratio: 'full',
   };
 
@@ -109,7 +97,7 @@ function MessagePlayerFirstTime(sender_id) {
             {
               title: 'Thanks for playing! Hope to see you again!',
               subtitle: 'Invite your friends to challenge them',
-              image_url: 'https://i.ibb.co/5YKW8h4/Banner-1200-627.png',
+              image_url: game.imageUrl,
               buttons: [button],
             },
           ],
@@ -118,10 +106,7 @@ function MessagePlayerFirstTime(sender_id) {
     },
   };
 
-  CallSendAPI(
-    messageData,
-    'EAAlbC6xI39oBAKgEVhgsQyBdcLjxrpyssJ60VWyPheILEFdJas8XNzSY1YvBOkfOZAX5dx3bwo7B3X0DcGBb4V3dkodX3hrQM6XeciSHVgbf6oQ4QzHFEdmZCrKdZCYCNqa1ElDxjKEaXQmOAgaeEZAnZCVI0SBUbHZAQZCIi1fjb1kZCnBN6XXP0eoqOlKnhI8ZD'
-  );
+  CallSendAPI(messageData, game.pat);
 }
 
 module.exports = {
