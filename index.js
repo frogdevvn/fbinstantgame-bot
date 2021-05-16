@@ -110,7 +110,7 @@ function AddPlayer(sender_id, player_id, context_id, game) {
 
       messaging.MessagePlayerFirstTime(game, sender_id);
 
-      console.log(`[${game.name}] Added ' + sender_id + ' success!`);
+      console.log(`[${game.name}] Added  + ${sender_id} + ' success!`);
     } else {
       // Player has come back so reset send
       red.hmset(key, 'tsm', '0', 'lt', now);
