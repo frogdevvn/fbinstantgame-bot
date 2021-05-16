@@ -21,7 +21,7 @@ var PAGES = [
     title: 'Daily Reward!',
     subtitle: 'A free rewards is waiting for you! Claim now!',
     cta: 'Claim',
-    imageUrl: 'https://i.ibb.co/5YKW8h4/Banner-1200-627.png',
+    imageUrl: 'https://i.ibb.co/rsYh2c5/1200627-onetcandy.jpg',
     payload: null,
     pat: 'EAAhjb5tv9JkBAIZAb73s6bfWMFTwfwT1dVHIt1xRjpbOndSmdbh2u74mwsCelX8dUxzdwdTLyAyRcj5Yt9ZBi3njENlOdaZC60icHNUtSXlxTiYto8mlb8gTQemWDSsu4vs6Y5GAJQqcZAZB1H9ACltmga1YKR8y0ZBjABq0mWr9CvnQ38eL8dadGnvxlqXQcYCtUS2vwg8wZDZD',
   },
