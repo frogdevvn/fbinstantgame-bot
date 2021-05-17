@@ -107,8 +107,6 @@ function MessagePlayerFirstTime(game, sender_id) {
   };
 
   CallSendAPI(messageData, game.pat);
-
-  console.log(`[${game.name}] Sent message first time to ${sender_id}!`);
 }
 
 module.exports = {
